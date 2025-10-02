@@ -1,34 +1,35 @@
 import EmployeeCard from "./EmployeeCard";
-import type { Employee } from "../model/Employee";
+import type {Employee} from "../model/Employee";
 import EmployeeTable from './EmployeeTable';
-import { useState } from "react";
 
-interface EmployeeListProps{
-    employees: Employee[]
+interface EmployeeListProps {
+    employees: Employee[],
+    viewCard: boolean,
 }
 
-function EmployeeList({employees}: EmployeeListProps) {
-    const [viewCard, setViewCard] = useState(false);
+function EmployeeList({employees, viewCard}: EmployeeListProps) {
+
     return (
         <>
-            {viewCard == true
-            ?<div className="p-6 bg-gray-50 min-h-screen flex items-start justify-center gap-3">
-                {employees.map(
-                (e) => (
-                    <EmployeeCard
-                    key={e.id}
-                    employee={e}
-                    highlight = {e.title == "Manager" ? true:false}
-                    />
-                )
-                )}
-            </div>
-            :<EmployeeTable
-            employees = {employees}
-            />
+
+            {viewCard
+                ? <div className="p-6 bg-gray-50 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
+                    {employees.map(
+                        (e) => (
+                            <EmployeeCard
+                                key={e.id}
+                                employee={e}
+                                highlight={e.title == "Manager"}
+                            />
+                        )
+                    )}
+                </div>
+                : <EmployeeTable
+                    employees={employees}
+                />
             }
-            
-            
+
+
         </>
     );
 }

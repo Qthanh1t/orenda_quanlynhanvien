@@ -1,25 +1,31 @@
-import type { Employee } from "../model/Employee";
+import type {Employee} from "../model/Employee";
 
-const EmployeeCard = ({employee, highlight}: {employee: Employee, highlight: boolean}) => {
+interface EmployeeProps {
+    employee: Employee,
+    highlight: boolean
+}
 
-  return (
-    <article className={`max-w-sm w-full rounded-xl shadow-md overflow-hidden ${highlight? 'bg-red-100': 'bg-green-50'}`} >
-    <div className="p-4">
-    <h3 className="text-lg font-semibold text-slate-900">
-    {employee?.name || "Tên nhân viên"}
-    </h3>
-    <p className="text-sm text-slate-500">{employee?.title || "Chức vụ"}</p>
+const EmployeeCard = ({employee, highlight}: EmployeeProps) => {
+
+    return (
+        <article
+            className={`w-full rounded-lg shadow-sm border border-slate-100 ${highlight ? 'bg-red-100 hover:bg-red-200 transition-colors' : 'bg-green-100 hover:bg-green-200 transition-colors'}`}>
+            <div className="p-4 sm:p-5 md:p-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-slate-900">
+                    {employee?.name || "Tên nhân viên"}
+                </h3>
+                <p className="text-sm text-slate-500">{employee?.title || "Chức vụ"}</p>
 
 
-    <div className="mt-3 text-sm text-slate-600 space-y-1">
-    <p>ID: {employee?.id ?? "-"}</p>
-    <p>Mã NV: {employee?.code ?? "-"}</p>
-    <p>📞 {employee?.phone || "-"}</p>
-    <p>✉️ {employee?.email || "email@example.com"}</p>
-    </div>
-    </div>
-    </article>
-  );
+                <div className="mt-3 text-sm text-slate-600 space-y-1">
+                    <p className="text-xs sm:text-sm"><span className="font-medium">ID:</span> {employee.id}</p>
+                    <p className="text-xs sm:text-sm"><span className="font-medium">Mã NV:</span> {employee.code}</p>
+                    <p className="truncate text-xs sm:text-sm">📞 {employee.phone}</p>
+                    <p className="truncate text-xs sm:text-sm">✉️ {employee.email}</p>
+                </div>
+            </div>
+        </article>
+    );
 };
 
 

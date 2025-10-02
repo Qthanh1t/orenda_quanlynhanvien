@@ -1,29 +1,53 @@
-
 import './App.css'
 import EmployeeHeader from './component/EmployeeHeader';
 import EmployeeList from './component/EmployeeList';
+import {useMemo, useState} from "react";
+import {employees} from "./data/employees.ts";
+import {EmployeeSearch} from "./component/EmployeeSearch.tsx";
+import {EmployeeFilter} from "./component/EmployeeFilter.tsx";
 
 
 function App() {
 
-  const employees = [
-  { id: 1, code: "EMP001", name: "Nguyễn Văn A", title: "Frontend Dev",   phone: "0901 234 567", email: "a.nguyen@company.com" },
-  { id: 2, code: "EMP002", name: "Trần Thị B",   title: "Backend Dev",    phone: "0902 345 678", email: "b.tran@company.com" },
-  { id: 3, code: "EMP003", name: "Lê Văn C",     title: "UI/UX Designer", phone: "0903 456 789", email: "c.le@company.com" },
-  { id: 4, code: "EMP004", name: "Phạm Văn D",   title: "Manager",        phone: "0904 567 890", email: "d.pham@company.com" }
-];
+    const [viewCard, setViewCard] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedTitle, setSelectedTitle] = useState("");
 
-  return (
-    <>
-      <EmployeeHeader 
-        count = {employees.length}
-      />
-      <EmployeeList
-        employees = {employees}
-      />
-      
-    </>
-  )
+    const titles: string[] = ["Dev", "Designer", "Manager"];
+
+    function removeVietnameseTones(str: string): string {
+        return str
+            .normalize("NFD") // tách ký tự có dấu thành base + dấu
+            .replace(/[\u0300-\u036f]/g, "") // xóa dấu
+            .replace(/đ/g, "d")
+            .replace(/Đ/g, "D");
+    }
+
+    const filteredEmployees = useMemo(() => {
+        return employees.filter((employee) => {
+            const matchSearch = removeVietnameseTones(employee.name.toLowerCase()).includes(removeVietnameseTones(searchTerm.toLowerCase()))
+            const matchTitle = selectedTitle ? employee.title.toLowerCase().includes(selectedTitle.toLowerCase()) : true;
+            return matchSearch && matchTitle;
+        });
+    }, [searchTerm, selectedTitle]);
+    return (
+        <>
+            <EmployeeHeader
+                count={employees.length}
+                viewCard={viewCard}
+                setViewCard={setViewCard}
+            />
+            <div className="flex gap-2">
+                <EmployeeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+                <EmployeeFilter selectedTitle={selectedTitle} setSelectedTitle={setSelectedTitle} titles={titles}/>
+            </div>
+            <EmployeeList
+                employees={filteredEmployees}
+                viewCard={viewCard}
+            />
+
+        </>
+    )
 }
 
 export default App
