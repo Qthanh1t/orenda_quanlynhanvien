@@ -37,7 +37,7 @@ function App() {
                 viewCard={viewCard}
                 setViewCard={setViewCard}
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-2">
                 <EmployeeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
                 <EmployeeFilter selectedTitle={selectedTitle} setSelectedTitle={setSelectedTitle} titles={titles}/>
             </div>

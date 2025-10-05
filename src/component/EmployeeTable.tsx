@@ -11,10 +11,10 @@ function EmployeeTable({employees}: EmployeesProps) {
                 <thead className="bg-green-500 text-white">
                 <tr>
                     <th className="px-4 py-2 text-left">ID</th>
-                    <th className="px-4 py-2 text-left">Code</th>
-                    <th className="px-4 py-2 text-left">Name</th>
-                    <th className="px-4 py-2 text-left">Title</th>
-                    <th className="px-4 py-2 text-left">Phone</th>
+                    <th className="px-4 py-2 text-left">Mã NV</th>
+                    <th className="px-4 py-2 text-left">Họ tên</th>
+                    <th className="px-4 py-2 text-left">Chức vụ</th>
+                    <th className="px-4 py-2 text-left">SĐT</th>
                     <th className="px-4 py-2 text-left">Email</th>
                 </tr>
                 </thead>

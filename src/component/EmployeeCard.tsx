@@ -20,8 +20,8 @@ const EmployeeCard = ({employee, highlight}: EmployeeProps) => {
                 <div className="mt-3 text-sm text-slate-600 space-y-1">
                     <p className="text-xs sm:text-sm"><span className="font-medium">ID:</span> {employee.id}</p>
                     <p className="text-xs sm:text-sm"><span className="font-medium">Mã NV:</span> {employee.code}</p>
-                    <p className="truncate text-xs sm:text-sm">📞 {employee.phone}</p>
-                    <p className="truncate text-xs sm:text-sm">✉️ {employee.email}</p>
+                    <p className="truncate text-xs sm:text-sm"><span className="font-medium">SĐT:</span> {employee.phone}</p>
+                    <p className="truncate text-xs sm:text-sm"><span className="font-medium">Email:</span> {employee.email}</p>
                 </div>
             </div>
         </article>
