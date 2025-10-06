@@ -4,8 +4,9 @@ import EmployeeList from './component/EmployeeList';
 import {useEffect, useMemo, useState} from "react";
 import {EmployeeSearch} from "./component/EmployeeSearch.tsx";
 import {EmployeeFilter} from "./component/EmployeeFilter.tsx";
-import {removeVietnameseTones} from './utils/util.ts';
 import {useEmployee} from "./hook/useEmployee.ts";
+import {titles} from "./data/title.ts";
+import {employeesFilter} from "./utils/util.ts";
 
 function App() {
 
@@ -15,16 +16,10 @@ function App() {
     const {employees, addSampleEmployee, deleteAllEmployee} = useEmployee();
     const [numberOfEmployees, setNumberOfEmployees] = useState(employees.length);
     const [showList, setShowList] = useState(true);
-    
-    const titles: string[] = ["Dev", "Designer", "Manager"];
 
 
     const filteredEmployees = useMemo(() => {
-        return employees.filter((employee) => {
-            const matchSearch = removeVietnameseTones(employee.name.toLowerCase()).includes(removeVietnameseTones(searchTerm.toLowerCase()))
-            const matchTitle = selectedTitle ? employee.title.toLowerCase().includes(selectedTitle.toLowerCase()) : true;
-            return matchSearch && matchTitle;
-        });
+        return employeesFilter(employees, searchTerm, selectedTitle);
     }, [employees, searchTerm, selectedTitle]);
 
     useEffect(() => {
