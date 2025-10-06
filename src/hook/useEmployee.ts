@@ -1,34 +1,54 @@
-import {employeesList, IdsList} from "../data/employees.ts";
-import {useState} from "react";
+import {employeesList} from "../data/employees.ts";
+import {useEffect, useState} from "react";
+import {employeeApi} from "../api/employeeApi.ts"
+import type {Employee} from "../model/Employee.ts";
 
 export function useEmployee() {
 
-    const [employees, setEmployees] = useState(employeesList);
-    const [ids, setIds] = useState(IdsList);
+    const [employees, setEmployees] = useState<Employee[]>(employeesList);
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
-    function addSampleEmployee() {
-        let newId: number;
-        do {
-            newId = Math.floor(Math.random() * (100) + 1)
-        } while (ids.has(newId));
-        setIds((prev) => new Set(prev).add(newId))
+    const fetchEmployees = async () => {
+        setIsLoading(true);
+        try {
+            const res = await employeeApi.getAll()
+            setEmployees(res)
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message)
+            } else {
+                setError(String(error))
+            }
+        } finally {
+            setIsLoading(false)
+        }
+
+    }
+
+    useEffect(() => {
+        (async () => {
+            await fetchEmployees()
+        })();
+    }, []);
+
+    const addSampleEmployee = async () => {
+        const newId: number = Number(employees[employees.length - 1].id) + 1;
         const formattedId: string = newId.toString().padStart(3, '0');
-        setEmployees((prev) => [...prev,
-            {
-                id: newId,
-                code: `EMP${formattedId}`,
-                name: "tourist",
-                title: "Backend Dev",
-                phone: "0123 456 789",
-                email: "tourist@company.com"
-            }])
-
+        await employeeApi.createEmployee({
+            id: newId,
+            code: `EMP${formattedId}`,
+            name: "tourist",
+            title: "Backend Dev",
+            phone: "0123 456 789",
+            email: "tourist@company.com"
+        })
+        await fetchEmployees()
     }
 
     const deleteAllEmployee = () => {
-        setIds(new Set());
         setEmployees([]);
     }
 
-    return {employees, addSampleEmployee, deleteAllEmployee};
+    return {employees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee};
 }

@@ -13,7 +13,7 @@ function App() {
     const [viewCard, setViewCard] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedTitle, setSelectedTitle] = useState("");
-    const {employees, addSampleEmployee, deleteAllEmployee} = useEmployee();
+    const {employees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee} = useEmployee();
     const [numberOfEmployees, setNumberOfEmployees] = useState(employees.length);
     const [showList, setShowList] = useState(true);
 
@@ -59,11 +59,30 @@ function App() {
                 </span>
             </div>
             {
-                showList &&
-                <EmployeeList
-                    employees={filteredEmployees}
-                    viewCard={viewCard}
-                />
+                showList && (
+                    isLoading ?
+                        <div className="flex justify-center items-center h-40">
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+                        </div>
+                        :
+                        error ?
+                            <div className="text-center p-5 text-red-600">
+                                ⚠️ Lỗi: {error}
+                                <br/>
+                                <button
+                                    onClick={fetchEmployees}
+                                    className="mt-3 bg-green-500 text-white px-3 py-1 rounded"
+                                >
+                                    Thử lại
+                                </button>
+                            </div>
+                            :
+                            <EmployeeList
+                                employees={filteredEmployees}
+                                viewCard={viewCard}
+                            />
+                )
+
             }
 
 

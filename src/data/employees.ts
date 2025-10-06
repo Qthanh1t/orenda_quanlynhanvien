@@ -1,6 +1,5 @@
 import type {Employee} from "../model/Employee.ts";
 
-export const IdsList: Set<number> = new Set([1, 2, 3, 4]);
 export const employeesList: Employee[] = [
     {
         id: 1,
