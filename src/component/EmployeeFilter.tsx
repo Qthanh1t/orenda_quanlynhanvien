@@ -6,7 +6,7 @@ interface EmployeeFilterProps {
     titles: string[];
 }
 
-export function EmployeeFilter({selectedTitle, setSelectedTitle, titles}: EmployeeFilterProps) {
+export const EmployeeFilter = React.memo(({selectedTitle, setSelectedTitle, titles}: EmployeeFilterProps) => {
     return (
         <select
             value={selectedTitle}
@@ -21,4 +21,4 @@ export function EmployeeFilter({selectedTitle, setSelectedTitle, titles}: Employ
             ))}
         </select>
     );
-}
+})

@@ -14,14 +14,16 @@ function EmployeeHeader({count, viewCard, setViewCard, addSampleEmployee, delete
             <div className="flex items-center justify-between gap-2">
                 <button
                     onClick={() => setViewCard(!viewCard)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium ${viewCard ? "bg-green-600 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"}`}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium ${viewCard ? "bg-green-600 text-white hover:bg-green-700 transition" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"}`}
                 >
                     {viewCard ? "Thẻ" : "Bảng"}
                 </button>
-                <button onClick={addSampleEmployee} className={"px-4 py-2 rounded-lg text-sm font-medium bg-green-600"}>
+                <button onClick={addSampleEmployee}
+                        className={"px-4 py-2 rounded-lg text-sm font-medium bg-green-600 hover:bg-green-700 transition"}>
                     Thêm nhanh
                 </button>
-                <button onClick={deleteAllEmployee} className={"px-4 py-2 rounded-lg text-sm font-medium bg-red-600"}>
+                <button onClick={deleteAllEmployee}
+                        className={"px-4 py-2 rounded-lg text-sm font-medium bg-red-600 hover:bg-red-700 transition"}>
                     Xóa tất cả
                 </button>
                 <span className="bg-white text-indigo-600 font-semibold px-4 py-2 rounded-full shadow">

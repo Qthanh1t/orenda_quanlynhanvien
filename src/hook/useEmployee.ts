@@ -43,12 +43,20 @@ export function useEmployee() {
             phone: "0123 456 789",
             email: "tourist@company.com"
         })
-        await fetchEmployees()
+        //await fetchEmployees()
+        setEmployees((prev) => [...prev, {
+            id: newId,
+            code: `EMP${formattedId}`,
+            name: "tourist",
+            title: "Backend Dev",
+            phone: "0123 456 789",
+            email: "tourist@company.com"
+        }])
     }
 
     const deleteAllEmployee = () => {
         setEmployees([]);
     }
 
-    return {employees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee};
+    return {employees, setEmployees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee};
 }

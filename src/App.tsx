@@ -1,4 +1,5 @@
 import './App.css'
+import '@ant-design/v5-patch-for-react-19';
 import EmployeeHeader from './component/EmployeeHeader';
 import EmployeeList from './component/EmployeeList';
 import {useEffect, useMemo, useState} from "react";
@@ -7,13 +8,22 @@ import {EmployeeFilter} from "./component/EmployeeFilter.tsx";
 import {useEmployee} from "./hook/useEmployee.ts";
 import {titles} from "./data/title.ts";
 import {employeesFilter} from "./utils/util.ts";
+import NumberOfEmployees from "./component/NumberOfEmployees.tsx";
 
 function App() {
 
     const [viewCard, setViewCard] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedTitle, setSelectedTitle] = useState("");
-    const {employees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee} = useEmployee();
+    const {
+        employees,
+        setEmployees,
+        isLoading,
+        error,
+        fetchEmployees,
+        addSampleEmployee,
+        deleteAllEmployee
+    } = useEmployee();
     const [numberOfEmployees, setNumberOfEmployees] = useState(employees.length);
     const [showList, setShowList] = useState(true);
 
@@ -39,9 +49,7 @@ function App() {
             <div className="flex gap-2 mb-2 items-center">
                 <EmployeeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
                 <EmployeeFilter selectedTitle={selectedTitle} setSelectedTitle={setSelectedTitle} titles={titles}/>
-                <div className="border border-green-500 p-1.5 rounded-md">
-                    Số nhân viên: {numberOfEmployees}
-                </div>
+                <NumberOfEmployees numberOfEmployees={numberOfEmployees}/>
                 <button
                     onClick={() => setShowList(!showList)}
                     className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
@@ -79,6 +87,7 @@ function App() {
                             :
                             <EmployeeList
                                 employees={filteredEmployees}
+                                setEmployees={setEmployees}
                                 viewCard={viewCard}
                             />
                 )
