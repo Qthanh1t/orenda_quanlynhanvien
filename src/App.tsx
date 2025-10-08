@@ -17,10 +17,8 @@ function App() {
     const [selectedTitle, setSelectedTitle] = useState("");
     const {
         employees,
-        setEmployees,
         isLoading,
         error,
-        fetchEmployees,
         addSampleEmployee,
         deleteAllEmployee
     } = useEmployee();
@@ -77,17 +75,10 @@ function App() {
                             <div className="text-center p-5 text-red-600">
                                 ⚠️ Lỗi: {error}
                                 <br/>
-                                <button
-                                    onClick={fetchEmployees}
-                                    className="mt-3 bg-green-500 text-white px-3 py-1 rounded"
-                                >
-                                    Thử lại
-                                </button>
                             </div>
                             :
                             <EmployeeList
                                 employees={filteredEmployees}
-                                setEmployees={setEmployees}
                                 viewCard={viewCard}
                             />
                 )

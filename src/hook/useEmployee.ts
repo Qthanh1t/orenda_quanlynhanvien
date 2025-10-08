@@ -58,5 +58,5 @@ export function useEmployee() {
         setEmployees([]);
     }
 
-    return {employees, setEmployees, isLoading, error, fetchEmployees, addSampleEmployee, deleteAllEmployee};
+    return {employees, isLoading, error, addSampleEmployee, deleteAllEmployee};
 }

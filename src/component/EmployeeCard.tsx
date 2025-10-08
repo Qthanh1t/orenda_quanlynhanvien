@@ -1,11 +1,11 @@
 import type {Employee} from "../model/Employee";
 import React from "react";
+import {NavLink} from "react-router-dom";
 
 interface Props {
     employee: Employee,
     highlight: boolean,
     setSelectedEmployee: React.Dispatch<React.SetStateAction<Employee | undefined>>,
-    setShowModalUpdate: React.Dispatch<React.SetStateAction<boolean>>
     setShowDetailModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -13,7 +13,6 @@ const EmployeeCard = React.memo(({
                                      employee,
                                      highlight,
                                      setSelectedEmployee,
-                                     setShowModalUpdate,
                                      setShowDetailModal
                                  }: Props) => {
 
@@ -22,11 +21,7 @@ const EmployeeCard = React.memo(({
         setSelectedEmployee(employee);
         setShowDetailModal(true)
     }
-    const handleUpdateEmployee = (employee: Employee) => {
-        setSelectedEmployee(employee);
-        setShowModalUpdate(true);
 
-    }
     return (
         <>
             <article
@@ -53,11 +48,13 @@ const EmployeeCard = React.memo(({
                             className="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700 transition">
                         Xem chi tiết
                     </button>
-                    <button
-                        onClick={() => handleUpdateEmployee(employee)}
-                        className={"bg-yellow-300 text-white text-sm px-3 py-1 rounded hover:bg-yellow-500 transition"}>
-                        Sửa
-                    </button>
+                    <NavLink to={`/updateEmployee/${employee.id}`}>
+                        <button
+                            className={"bg-yellow-300 text-white text-sm px-3 py-1 rounded hover:bg-yellow-500 transition"}>
+                            Sửa
+                        </button>
+                    </NavLink>
+
                     <button className={"bg-red-600 text-white text-sm px-3 py-1 rounded hover:bg-red-700 transition"}>
                         Xóa
                     </button>

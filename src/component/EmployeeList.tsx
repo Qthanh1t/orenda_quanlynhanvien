@@ -1,29 +1,19 @@
 import EmployeeCard from "./EmployeeCard";
 import type {Employee} from "../model/Employee";
 import EmployeeTable from './EmployeeTable';
-import React, {useState} from "react";
-import UpdateEmployeeModal from "./UpdateEmployeeModal.tsx";
-import {employeeApi} from "../api/employeeApi.ts";
+import {useState} from "react";
 import EmployeeDetailModal from "./EmployeeDetailModal.tsx";
 
 interface EmployeeListProps {
     employees: Employee[],
-    setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>,
     viewCard: boolean,
 }
 
-function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
+function EmployeeList({employees, viewCard}: EmployeeListProps) {
 
-    const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showDetailModal, setShowDetailModal] = useState(false)
 
-    const handleUpdateEmployee = async (data: Employee) => {
-        await employeeApi.updateEmployee(data.id, data)
-        setEmployees((prev) =>
-            prev.map((e) => (e.id === data.id ? data : e))
-        );
-    }
     return (
         <>
 
@@ -36,7 +26,6 @@ function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
                                 employee={e}
                                 highlight={e.title == "Manager"}
                                 setSelectedEmployee={setSelectedEmployee}
-                                setShowModalUpdate={setShowModalUpdate}
                                 setShowDetailModal={setShowDetailModal}
                             />
                         )
@@ -47,8 +36,6 @@ function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
                 />
             }
 
-            <UpdateEmployeeModal employee={selectedEmployee} showModalUpdate={showModalUpdate}
-                                 setShowModalUpdate={setShowModalUpdate} handleUpdateEmployee={handleUpdateEmployee}/>
             <EmployeeDetailModal showDetailModal={showDetailModal} setShowDetailModal={setShowDetailModal}
                                  employee={selectedEmployee}/>
         </>
