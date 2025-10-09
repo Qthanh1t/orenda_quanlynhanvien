@@ -7,19 +7,26 @@ interface Props {
     highlight: boolean,
     setSelectedEmployee: React.Dispatch<React.SetStateAction<Employee | undefined>>,
     setShowDetailModal: React.Dispatch<React.SetStateAction<boolean>>
+    setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const EmployeeCard = React.memo(({
                                      employee,
                                      highlight,
                                      setSelectedEmployee,
-                                     setShowDetailModal
+                                     setShowDetailModal,
+                                     setShowDeleteModal
                                  }: Props) => {
 
     const handleViewDetails = (employee: Employee) => {
         console.log(employee);
         setSelectedEmployee(employee);
         setShowDetailModal(true)
+    }
+
+    const handleDeleteEmployee = (employee: Employee) => {
+        setSelectedEmployee(employee);
+        setShowDeleteModal(true);
     }
 
     return (
@@ -55,7 +62,9 @@ const EmployeeCard = React.memo(({
                         </button>
                     </NavLink>
 
-                    <button className={"bg-red-600 text-white text-sm px-3 py-1 rounded hover:bg-red-700 transition"}>
+                    <button
+                        onClick={() => handleDeleteEmployee(employee)}
+                        className={"bg-red-600 text-white text-sm px-3 py-1 rounded hover:bg-red-700 transition"}>
                         Xóa
                     </button>
                 </div>

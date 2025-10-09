@@ -32,31 +32,31 @@ export function useEmployee() {
         })();
     }, []);
 
-    const addSampleEmployee = async () => {
-        const newId: number = Number(employees[employees.length - 1].id) + 1;
-        const formattedId: string = newId.toString().padStart(3, '0');
-        await employeeApi.createEmployee({
-            id: newId,
-            code: `EMP${formattedId}`,
-            name: "tourist",
-            title: "Backend Dev",
-            phone: "0123 456 789",
-            email: "tourist@company.com"
-        })
-        //await fetchEmployees()
-        setEmployees((prev) => [...prev, {
-            id: newId,
-            code: `EMP${formattedId}`,
-            name: "tourist",
-            title: "Backend Dev",
-            phone: "0123 456 789",
-            email: "tourist@company.com"
-        }])
-    }
+    // const addSampleEmployee = async () => {
+    //     const newId: number = Number(employees[employees.length - 1].id) + 1;
+    //     const formattedId: string = newId.toString().padStart(3, '0');
+    //     await employeeApi.createEmployee({
+    //         id: newId,
+    //         code: `EMP${formattedId}`,
+    //         name: "tourist",
+    //         title: "Backend Dev",
+    //         phone: "0123 456 789",
+    //         email: "tourist@company.com"
+    //     })
+    //     //await fetchEmployees()
+    //     setEmployees((prev) => [...prev, {
+    //         id: newId,
+    //         code: `EMP${formattedId}`,
+    //         name: "tourist",
+    //         title: "Backend Dev",
+    //         phone: "0123456789",
+    //         email: "tourist@company.com"
+    //     }])
+    // }
 
     const deleteAllEmployee = () => {
         setEmployees([]);
     }
 
-    return {employees, isLoading, error, addSampleEmployee, deleteAllEmployee};
+    return {employees, setEmployees, isLoading, error, deleteAllEmployee};
 }

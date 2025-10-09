@@ -14,3 +14,20 @@ export const employeesFilter = (employees: Employee[], searchTerm: string, selec
         return matchSearch && matchTitle;
     });
 }
+
+export const getSampleEmployees = (): Employee => {
+    return {
+        id: 0,
+        code: `EMP000`,
+        name: "",
+        title: "",
+        phone: "",
+        email: ""
+    }
+}
+
+export const modifyEmployeeCode = (employee: Employee): Employee => {
+    const formattedId: string = employee.id.toString().padStart(3, '0');
+    employee.code = `EMP${formattedId}`;
+    return employee;
+}

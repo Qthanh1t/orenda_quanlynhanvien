@@ -17,9 +17,9 @@ function App() {
     const [selectedTitle, setSelectedTitle] = useState("");
     const {
         employees,
+        setEmployees,
         isLoading,
         error,
-        addSampleEmployee,
         deleteAllEmployee
     } = useEmployee();
     const [numberOfEmployees, setNumberOfEmployees] = useState(employees.length);
@@ -40,7 +40,6 @@ function App() {
                 count={employees.length}
                 viewCard={viewCard}
                 setViewCard={setViewCard}
-                addSampleEmployee={addSampleEmployee}
                 deleteAllEmployee={deleteAllEmployee}
             />
 
@@ -80,6 +79,7 @@ function App() {
                             <EmployeeList
                                 employees={filteredEmployees}
                                 viewCard={viewCard}
+                                setEmployees={setEmployees}
                             />
                 )
 

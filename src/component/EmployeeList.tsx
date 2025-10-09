@@ -1,18 +1,25 @@
 import EmployeeCard from "./EmployeeCard";
 import type {Employee} from "../model/Employee";
 import EmployeeTable from './EmployeeTable';
-import {useState} from "react";
+import React, {useState} from "react";
 import EmployeeDetailModal from "./EmployeeDetailModal.tsx";
+import DeleteEmployeeModal from "./DeleteEmployeeModal.tsx";
 
 interface EmployeeListProps {
     employees: Employee[],
+    setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>,
     viewCard: boolean,
 }
 
-function EmployeeList({employees, viewCard}: EmployeeListProps) {
+function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
 
     const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showDetailModal, setShowDetailModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+    const deleteEmployee = (employee: Employee) => {
+        setEmployees((prev) => prev.filter((e: Employee) => e.id !== employee.id));
+    }
 
     return (
         <>
@@ -27,6 +34,7 @@ function EmployeeList({employees, viewCard}: EmployeeListProps) {
                                 highlight={e.title == "Manager"}
                                 setSelectedEmployee={setSelectedEmployee}
                                 setShowDetailModal={setShowDetailModal}
+                                setShowDeleteModal={setShowDeleteModal}
                             />
                         )
                     )}
@@ -38,6 +46,8 @@ function EmployeeList({employees, viewCard}: EmployeeListProps) {
 
             <EmployeeDetailModal showDetailModal={showDetailModal} setShowDetailModal={setShowDetailModal}
                                  employee={selectedEmployee}/>
+            <DeleteEmployeeModal employee={selectedEmployee} showDeleteModal={showDeleteModal}
+                                 setShowDeleteModal={setShowDeleteModal} deleteEmployee={deleteEmployee}/>
         </>
     );
 }

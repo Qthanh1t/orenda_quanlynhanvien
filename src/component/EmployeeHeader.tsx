@@ -1,10 +1,10 @@
 import * as React from "react";
+import {NavLink} from "react-router-dom";
 
-function EmployeeHeader({count, viewCard, setViewCard, addSampleEmployee, deleteAllEmployee}: {
+function EmployeeHeader({count, viewCard, setViewCard, deleteAllEmployee}: {
     count: number,
     viewCard: boolean,
     setViewCard: React.Dispatch<React.SetStateAction<boolean>>,
-    addSampleEmployee: () => void
     deleteAllEmployee: () => void
 }) {
     return (
@@ -18,10 +18,13 @@ function EmployeeHeader({count, viewCard, setViewCard, addSampleEmployee, delete
                 >
                     {viewCard ? "Thẻ" : "Bảng"}
                 </button>
-                <button onClick={addSampleEmployee}
-                        className={"px-4 py-2 rounded-lg text-sm font-medium bg-green-600 hover:bg-green-700 transition"}>
-                    Thêm nhanh
-                </button>
+                <NavLink to={"/addEmployee"}>
+                    <button
+                        className={"px-4 py-2 rounded-lg text-sm text-white font-medium bg-green-600 hover:bg-green-700 transition"}>
+                        Thêm Nhân Viên
+                    </button>
+                </NavLink>
+
                 <button onClick={deleteAllEmployee}
                         className={"px-4 py-2 rounded-lg text-sm font-medium bg-red-600 hover:bg-red-700 transition"}>
                     Xóa tất cả
