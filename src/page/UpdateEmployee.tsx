@@ -1,9 +1,10 @@
 import {Button, Form, Input, Typography} from 'antd';
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {employeeApi} from "../api/employeeApi.ts";
 import {useForm} from "antd/es/form/Form";
 import type {Employee} from "../model/Employee.ts";
+import {employeeStore} from "../store/EmployeeStore.tsx";
+import {observer} from "mobx-react-lite";
 
 const {Title} = Typography;
 
@@ -19,49 +20,28 @@ const validateMessages = {
     },
 };
 
-const UpdateEmployee = () => {
+const UpdateEmployee = observer(() => {
 
     const {id} = useParams();
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string>()
+    const {error, isLoading} = employeeStore
     const [employee, setEmployee] = useState<Employee | null>()
     const [form] = useForm();
     const navigate = useNavigate();
 
     const onFinish = async (values: Employee) => {
-        try {
-            if (!employee) {
-                return
-            }
-            setEmployee({...employee, ...values})
-            await employeeApi.updateEmployee(employee.id, {...employee, ...values});
-            navigate("/employees")
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message)
-            } else {
-                setError(String(error))
-            }
+        if (!employee) {
+            return
         }
-
+        setEmployee({...employee, ...values})
+        await employeeStore.updateEmployee(employee.id, {...employee, ...values});
+        navigate("/employees")
     };
 
     useEffect(() => {
         (async () => {
-            setIsLoading(true);
-            try {
-                const res = await employeeApi.getEmployeeById(Number(id));
-                setEmployee(res);
-                form.setFieldsValue(res)
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message)
-                } else {
-                    setError(String(error))
-                }
-            } finally {
-                setIsLoading(false)
-            }
+            const res = await employeeStore.getEmployeeById(Number(id));
+            setEmployee(res);
+            form.setFieldsValue(res)
         })()
 
     }, [id, form]);
@@ -124,6 +104,6 @@ const UpdateEmployee = () => {
 
         </>
     );
-};
+});
 
 export default UpdateEmployee;

@@ -1,9 +1,10 @@
-import React from "react";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "../store/EmployeeStore.tsx";
 
-const NumberOfEmployees = React.memo(({numberOfEmployees}: { numberOfEmployees: number }) => {
+const NumberOfEmployees = observer(() => {
     return (
         <div className="border border-green-500 p-1.5 rounded-md">
-            Số nhân viên: {numberOfEmployees}
+            Số nhân viên: {employeeStore.filteredEmployees.length}
         </div>
     );
 });

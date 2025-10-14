@@ -1,44 +1,30 @@
 import EmployeeCard from "./EmployeeCard";
 import type {Employee} from "../model/Employee";
 import EmployeeTable from './EmployeeTable';
-import React, {useEffect, useState} from "react";
+import {useState} from "react";
 import EmployeeDetailModal from "./EmployeeDetailModal.tsx";
 import DeleteEmployeeModal from "./DeleteEmployeeModal.tsx";
 import {Pagination} from "antd";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "../store/EmployeeStore.tsx";
 
 interface EmployeeListProps {
-    employees: Employee[],
-    setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>,
     viewCard: boolean,
 }
 
-function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
+const EmployeeList = observer(({viewCard}: EmployeeListProps) => {
 
     const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showDetailModal, setShowDetailModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [employeesInPage, setEmployeesInPage] = useState<Employee[]>(employees)
-    const [page, setPage] = useState(1);
-
-    useEffect(() => {
-        const startIndex = (page - 1) * 8;
-        const data = employees.slice(startIndex, startIndex + 8)
-        setEmployeesInPage(data)
-    }, [page, employees]);
-    useEffect(() => {
-        setPage(1)
-    }, [employees]);
-
-    const deleteEmployee = (employee: Employee) => {
-        setEmployees((prev) => prev.filter((e: Employee) => e.id !== employee.id));
-    }
+    const {paginatedEmployees, setPage, page, filteredEmployees} = employeeStore;
 
     return (
         <>
 
             {viewCard
                 ? <div className="p-6 bg-gray-50 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
-                    {employeesInPage.map(
+                    {paginatedEmployees.map(
                         (e) => (
                             <EmployeeCard
                                 key={e.id}
@@ -52,7 +38,6 @@ function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
                     )}
                 </div>
                 : <EmployeeTable
-                    employees={employeesInPage}
                     setSelectedEmployee={setSelectedEmployee}
                     setShowDetailModal={setShowDetailModal}
                     setShowDeleteModal={setShowDeleteModal}
@@ -63,7 +48,7 @@ function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
                     defaultCurrent={1}
                     current={page}
                     pageSize={8}
-                    total={employees.length}
+                    total={filteredEmployees.length}
                     onChange={(p) => {
                         setPage(p);
                     }}
@@ -74,9 +59,9 @@ function EmployeeList({employees, setEmployees, viewCard}: EmployeeListProps) {
             <EmployeeDetailModal showDetailModal={showDetailModal} setShowDetailModal={setShowDetailModal}
                                  employee={selectedEmployee}/>
             <DeleteEmployeeModal employee={selectedEmployee} showDeleteModal={showDeleteModal}
-                                 setShowDeleteModal={setShowDeleteModal} deleteEmployee={deleteEmployee}/>
+                                 setShowDeleteModal={setShowDeleteModal}/>
         </>
     );
-}
+})
 
 export default EmployeeList;

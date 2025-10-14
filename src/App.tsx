@@ -2,51 +2,32 @@ import './App.css'
 import '@ant-design/v5-patch-for-react-19';
 import EmployeeHeader from './component/EmployeeHeader';
 import EmployeeList from './component/EmployeeList';
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {EmployeeSearch} from "./component/EmployeeSearch.tsx";
 import {EmployeeFilter} from "./component/EmployeeFilter.tsx";
-import {useEmployee} from "./hook/useEmployee.ts";
-import {titles} from "./data/title.ts";
-import {employeesFilter} from "./utils/util.ts";
 import NumberOfEmployees from "./component/NumberOfEmployees.tsx";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "./store/EmployeeStore.tsx";
 
-function App() {
+const App = observer(() => {
 
     const [viewCard, setViewCard] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedTitle, setSelectedTitle] = useState("");
-    const {
-        employees,
-        setEmployees,
-        isLoading,
-        error,
-        deleteAllEmployee
-    } = useEmployee();
-    const [numberOfEmployees, setNumberOfEmployees] = useState(employees.length);
     const [showList, setShowList] = useState(true);
 
-
-    const filteredEmployees = useMemo(() => {
-        return employeesFilter(employees, searchTerm, selectedTitle);
-    }, [employees, searchTerm, selectedTitle]);
-
     useEffect(() => {
-        setNumberOfEmployees(filteredEmployees.length);
-    }, [filteredEmployees])
-
+        (async () => await employeeStore.fetchListEmployees())()
+    }, [])
     return (
         <>
             <EmployeeHeader
-                count={employees.length}
                 viewCard={viewCard}
                 setViewCard={setViewCard}
-                deleteAllEmployee={deleteAllEmployee}
             />
 
             <div className="flex gap-2 mb-2 items-center">
-                <EmployeeSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
-                <EmployeeFilter selectedTitle={selectedTitle} setSelectedTitle={setSelectedTitle} titles={titles}/>
-                <NumberOfEmployees numberOfEmployees={numberOfEmployees}/>
+                <EmployeeSearch/>
+                <EmployeeFilter/>
+                <NumberOfEmployees/>
                 <button
                     onClick={() => setShowList(!showList)}
                     className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${
@@ -65,21 +46,19 @@ function App() {
             </div>
             {
                 showList && (
-                    isLoading ?
+                    employeeStore.isLoading ?
                         <div className="flex justify-center items-center h-40">
                             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
                         </div>
                         :
-                        error ?
+                        employeeStore.error ?
                             <div className="text-center p-5 text-red-600">
-                                ⚠️ Lỗi: {error}
+                                ⚠️ Lỗi: {employeeStore.error}
                                 <br/>
                             </div>
                             :
                             <EmployeeList
-                                employees={filteredEmployees}
                                 viewCard={viewCard}
-                                setEmployees={setEmployees}
                             />
                 )
 
@@ -88,6 +67,6 @@ function App() {
 
         </>
     )
-}
+});
 
 export default App

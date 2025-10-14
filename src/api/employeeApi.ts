@@ -5,13 +5,13 @@ export const employeeApi = {
     getAll: async (): Promise<Employee[]> => {
         return await baseApi.get<Employee[]>('/employees')
     },
-    getEmployeeById: async (id: number): Promise<Employee | null> => {
+    getEmployeeById: async (id: number): Promise<Employee> => {
         return await baseApi.get<Employee>(`/employees/${id}`)
     },
-    createEmployee: async (data: Employee): Promise<Employee | null> => {
+    createEmployee: async (data: Employee): Promise<Employee> => {
         return await baseApi.post<Employee>('/employees', data)
     },
-    updateEmployee: async (id: number, data: Employee): Promise<Employee | null> => {
+    updateEmployee: async (id: number, data: Employee): Promise<Employee> => {
         return await baseApi.put<Employee>(`/employees/${id}`, data)
     },
     deleteEmployeeById: async (id: number): Promise<Employee | null> => {

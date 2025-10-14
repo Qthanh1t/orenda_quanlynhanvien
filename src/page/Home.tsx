@@ -1,10 +1,15 @@
 import {Typography} from 'antd';
 import {RobotOutlined, SignatureOutlined, StarOutlined, TeamOutlined} from "@ant-design/icons";
-import {useEmployee} from "../hook/useEmployee.ts";
+import {useEffect} from "react";
+import {employeeStore} from "../store/EmployeeStore.tsx";
+import {observer} from "mobx-react-lite";
 
 const {Title} = Typography;
-const Home = () => {
-    const {employees, isLoading, error} = useEmployee();
+const Home = observer(() => {
+
+    useEffect(() => {
+        (async () => await employeeStore.fetchListEmployees())()
+    }, [])
     return (
         <>
             <header
@@ -12,14 +17,14 @@ const Home = () => {
                 <h1 className="text-xl font-bold">Trang Chủ</h1>
             </header>
 
-            {isLoading ?
+            {employeeStore.isLoading ?
                 <div className="flex justify-center items-center h-40">
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
                 </div>
                 :
-                error ?
+                employeeStore.error ?
                     <div className="text-center p-5 text-red-600">
-                        ⚠️ Lỗi: {error}
+                        ⚠️ Lỗi: {employeeStore.error}
                         <br/>
                     </div>
                     :
@@ -30,7 +35,7 @@ const Home = () => {
                                 Số lượng nhân viên <TeamOutlined/>
                             </Title>
                             <Title level={2}>
-                                {employees.length}
+                                {employeeStore.count}
                             </Title>
                         </div>
                         <div className={"flex items-center justify-center mt-4 gap-5 "}>
@@ -40,7 +45,7 @@ const Home = () => {
                                     Dev <RobotOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employees.filter((e) => {
+                                    {employeeStore.listEmployees.filter((e) => {
                                         return e.title.includes("Dev")
                                     }).length}
                                 </Title>
@@ -51,7 +56,7 @@ const Home = () => {
                                     Designer <SignatureOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employees.filter((e) => {
+                                    {employeeStore.listEmployees.filter((e) => {
                                         return e.title.includes("Designer")
                                     }).length}
                                 </Title>
@@ -62,7 +67,7 @@ const Home = () => {
                                     Manager <StarOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employees.filter((e) => {
+                                    {employeeStore.listEmployees.filter((e) => {
                                         return e.title.includes("Manager")
                                     }).length}
                                 </Title>
@@ -73,6 +78,6 @@ const Home = () => {
             }
         </>
     );
-};
+});
 
 export default Home;

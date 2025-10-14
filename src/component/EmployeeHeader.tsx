@@ -1,12 +1,12 @@
 import * as React from "react";
 import {NavLink} from "react-router-dom";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "../store/EmployeeStore.tsx";
 
-function EmployeeHeader({count, viewCard, setViewCard, deleteAllEmployee}: {
-    count: number,
+const EmployeeHeader = observer(({viewCard, setViewCard}: {
     viewCard: boolean,
     setViewCard: React.Dispatch<React.SetStateAction<boolean>>,
-    deleteAllEmployee: () => void
-}) {
+}) => {
     return (
         <header
             className="flex items-center justify-between bg-gradient-to-r from-green-500 to-green-300 text-white px-6 py-4 rounded-lg shadow-md mb-2">
@@ -25,17 +25,17 @@ function EmployeeHeader({count, viewCard, setViewCard, deleteAllEmployee}: {
                     </button>
                 </NavLink>
 
-                <button onClick={deleteAllEmployee}
+                <button onClick={employeeStore.deleteAllEmployee}
                         className={"px-4 py-2 rounded-lg text-sm font-medium bg-red-600 hover:bg-red-700 transition"}>
                     Xóa tất cả
                 </button>
                 <span className="bg-white text-indigo-600 font-semibold px-4 py-2 rounded-full shadow">
-                    Tổng số: {count}
+                    Tổng số: {employeeStore.count}
                 </span>
             </div>
 
         </header>
     );
-}
+})
 
 export default EmployeeHeader;

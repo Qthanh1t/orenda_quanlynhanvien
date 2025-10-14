@@ -1,13 +1,13 @@
 import {Modal} from "antd";
-import React, {useState} from "react";
+import React from "react";
 import type {Employee} from "../model/Employee.ts";
-import {employeeApi} from "../api/employeeApi.ts";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "../store/EmployeeStore.tsx";
 
 interface Props {
     employee?: Employee | null,
     showDeleteModal: boolean,
     setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>,
-    deleteEmployee: (employee: Employee) => void
 }
 
 const successModal = () => {
@@ -24,33 +24,20 @@ const errorModal = () => {
 };
 
 
-const DeleteEmployeeModal = ({employee, showDeleteModal, setShowDeleteModal, deleteEmployee}: Props) => {
-
-    const [error, setError] = useState<string>()
+const DeleteEmployeeModal = observer(({employee, showDeleteModal, setShowDeleteModal}: Props) => {
+    const {error} = employeeStore;
 
     const handleOk = async () => {
-        try {
-            if (!employee) {
-                return
-            }
-            await employeeApi.deleteEmployeeById(employee.id)
-            deleteEmployee(employee)
-            setShowDeleteModal(false);
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message)
-            } else {
-                setError(String(error))
-            }
-        } finally {
-            if (error) {
-                errorModal()
-            } else {
-                successModal()
-            }
-
+        if (!employee) {
+            return
         }
-
+        await employeeStore.deleteEmployee(employee.id)
+        setShowDeleteModal(false);
+        if (error) {
+            errorModal()
+        } else {
+            successModal()
+        }
     };
 
     const handleCancel = () => {
@@ -71,6 +58,6 @@ const DeleteEmployeeModal = ({employee, showDeleteModal, setShowDeleteModal, del
             </Modal>
         </>
     );
-};
+});
 
 export default DeleteEmployeeModal;

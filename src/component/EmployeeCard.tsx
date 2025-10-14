@@ -19,7 +19,6 @@ const EmployeeCard = React.memo(({
                                  }: Props) => {
 
     const handleViewDetails = (employee: Employee) => {
-        console.log(employee);
         setSelectedEmployee(employee);
         setShowDetailModal(true)
     }

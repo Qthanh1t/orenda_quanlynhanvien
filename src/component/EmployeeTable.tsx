@@ -1,18 +1,18 @@
 import type {Employee} from "../model/Employee";
 import {NavLink} from "react-router-dom";
 import React from "react";
+import {observer} from "mobx-react-lite";
+import {employeeStore} from "../store/EmployeeStore.tsx";
 
 interface EmployeesProps {
-    employees: Employee[],
     setSelectedEmployee: React.Dispatch<React.SetStateAction<Employee | undefined>>,
     setShowDetailModal: React.Dispatch<React.SetStateAction<boolean>>
     setShowDeleteModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmployeeTable({employees, setSelectedEmployee, setShowDetailModal, setShowDeleteModal}: EmployeesProps) {
+const EmployeeTable = observer(({setSelectedEmployee, setShowDetailModal, setShowDeleteModal}: EmployeesProps) => {
 
     const handleViewDetails = (employee: Employee) => {
-        console.log(employee);
         setSelectedEmployee(employee);
         setShowDetailModal(true)
     }
@@ -37,7 +37,7 @@ function EmployeeTable({employees, setSelectedEmployee, setShowDetailModal, setS
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                {employees.map((employee) => (
+                {employeeStore.paginatedEmployees.map((employee) => (
                     <tr
                         key={employee.id}
                         className={`${employee.title.includes("Manager") ? 'bg-red-100 hover:bg-red-200 transition-colors' : 'hover:bg-green-100 transition-colors'}`}
@@ -73,6 +73,6 @@ function EmployeeTable({employees, setSelectedEmployee, setShowDetailModal, setS
 
         </>
     );
-}
+})
 
 export default EmployeeTable;
