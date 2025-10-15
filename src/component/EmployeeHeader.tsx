@@ -30,7 +30,7 @@ const EmployeeHeader = observer(({viewCard, setViewCard}: {
                     Xóa tất cả
                 </button>
                 <span className="bg-white text-indigo-600 font-semibold px-4 py-2 rounded-full shadow">
-                    Tổng số: {employeeStore.count}
+                    Tổng số: {employeeStore.totalEmployees}
                 </span>
             </div>
 

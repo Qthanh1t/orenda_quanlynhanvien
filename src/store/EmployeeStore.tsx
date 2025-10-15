@@ -1,20 +1,34 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import {makeAutoObservable, reaction, runInAction} from "mobx";
 import type {Employee} from "../model/Employee.ts";
 import {employeeApi} from "../api/employeeApi.ts";
-import {employeesFilter, modifyEmployeeCode} from "../utils/util.ts";
-
+import {modifyEmployeeCode} from "../utils/util.ts";
+import {debounce} from "lodash"
 
 class EmployeeStore {
     listEmployees: Employee[] = [];
+    listTotalEmployees: Employee[] = [];
     isLoading: boolean = false;
     error: string | null = null;
     searchTerm: string = "";
     selectedTitle: string = "";
     page: number = 1;
     pageSize: number = 8;
+    numberOfFilteredEmployees: number = 0;
+    numberOfEmployees: number = 0;
 
     constructor() {
         makeAutoObservable(this);
+        reaction(
+            () => [this.searchTerm, this.selectedTitle, this.page, this.pageSize],
+            debounce(async () => {
+                await this.fetchListEmployees()
+            }, 400)
+        )
+    }
+
+    //numberOfEmployee de cap nhat trong trang employees, listTotalEmployees de hien thi so nhan vien trong trang Home
+    get totalEmployees() {
+        return this.numberOfEmployees ? this.numberOfEmployees : this.listTotalEmployees.length
     }
 
     setPage = (page: number) => {
@@ -31,20 +45,38 @@ class EmployeeStore {
         this.page = 1;
     }
 
-    get count() {
-        return this.listEmployees.length;
-    }
-
-    setEmployees(employees: Employee[]) {
-        this.listEmployees = employees;
+    fetchListTotalEmployees = async () => {
+        this.isLoading = true;
+        try {
+            const res = await employeeApi.getAll();
+            runInAction(() => {
+                this.listTotalEmployees = res;
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                runInAction(() => {
+                    this.error = error.message;
+                })
+            } else {
+                runInAction(() => {
+                    this.error = String(error);
+                })
+            }
+        } finally {
+            runInAction(() => {
+                this.isLoading = false;
+            })
+        }
     }
 
     fetchListEmployees = async () => {
         this.isLoading = true;
         try {
-            const res = await employeeApi.getAll()
+            const res = await employeeApi.getFilteredEmployees(this.page, this.pageSize, this.selectedTitle, this.searchTerm);
             runInAction(() => {
-                this.listEmployees = res;
+                this.listEmployees = res.data;
+                this.numberOfEmployees = res.totalEmployees
+                this.numberOfFilteredEmployees = res.numberOfFilteredEmployees
             })
         } catch (error) {
             if (error instanceof Error) {
@@ -100,6 +132,8 @@ class EmployeeStore {
                     this.error = String(error);
                 })
             }
+        } finally {
+            await this.fetchListEmployees()
         }
     }
 
@@ -145,15 +179,6 @@ class EmployeeStore {
 
     deleteAllEmployee = () => {
         this.listEmployees = []
-    }
-
-    get filteredEmployees() {
-        return employeesFilter(this.listEmployees, this.searchTerm, this.selectedTitle);
-    }
-
-    get paginatedEmployees() {
-        const startIndex = (this.page - 1) * this.pageSize;
-        return this.filteredEmployees.slice(startIndex, startIndex + this.pageSize);
     }
 }
 

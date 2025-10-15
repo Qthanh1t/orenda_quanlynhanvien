@@ -17,14 +17,14 @@ const EmployeeList = observer(({viewCard}: EmployeeListProps) => {
     const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showDetailModal, setShowDetailModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const {paginatedEmployees, setPage, page, filteredEmployees} = employeeStore;
+    const {listEmployees, setPage, page, numberOfFilteredEmployees} = employeeStore;
 
     return (
         <>
 
             {viewCard
                 ? <div className="p-6 bg-gray-50 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
-                    {paginatedEmployees.map(
+                    {listEmployees.map(
                         (e) => (
                             <EmployeeCard
                                 key={e.id}
@@ -48,7 +48,7 @@ const EmployeeList = observer(({viewCard}: EmployeeListProps) => {
                     defaultCurrent={1}
                     current={page}
                     pageSize={8}
-                    total={filteredEmployees.length}
+                    total={numberOfFilteredEmployees}
                     onChange={(p) => {
                         setPage(p);
                     }}

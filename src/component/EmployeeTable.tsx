@@ -37,7 +37,7 @@ const EmployeeTable = observer(({setSelectedEmployee, setShowDetailModal, setSho
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                {employeeStore.paginatedEmployees.map((employee) => (
+                {employeeStore.listEmployees.map((employee) => (
                     <tr
                         key={employee.id}
                         className={`${employee.title.includes("Manager") ? 'bg-red-100 hover:bg-red-200 transition-colors' : 'hover:bg-green-100 transition-colors'}`}

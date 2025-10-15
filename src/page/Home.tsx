@@ -8,7 +8,7 @@ const {Title} = Typography;
 const Home = observer(() => {
 
     useEffect(() => {
-        (async () => await employeeStore.fetchListEmployees())()
+        (async () => await employeeStore.fetchListTotalEmployees())()
     }, [])
     return (
         <>
@@ -35,7 +35,7 @@ const Home = observer(() => {
                                 Số lượng nhân viên <TeamOutlined/>
                             </Title>
                             <Title level={2}>
-                                {employeeStore.count}
+                                {employeeStore.totalEmployees}
                             </Title>
                         </div>
                         <div className={"flex items-center justify-center mt-4 gap-5 "}>
@@ -45,7 +45,7 @@ const Home = observer(() => {
                                     Dev <RobotOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employeeStore.listEmployees.filter((e) => {
+                                    {employeeStore.listTotalEmployees.filter((e) => {
                                         return e.title.includes("Dev")
                                     }).length}
                                 </Title>
@@ -56,7 +56,7 @@ const Home = observer(() => {
                                     Designer <SignatureOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employeeStore.listEmployees.filter((e) => {
+                                    {employeeStore.listTotalEmployees.filter((e) => {
                                         return e.title.includes("Designer")
                                     }).length}
                                 </Title>
@@ -67,7 +67,7 @@ const Home = observer(() => {
                                     Manager <StarOutlined/>
                                 </Title>
                                 <Title level={2}>
-                                    {employeeStore.listEmployees.filter((e) => {
+                                    {employeeStore.listTotalEmployees.filter((e) => {
                                         return e.title.includes("Manager")
                                     }).length}
                                 </Title>
